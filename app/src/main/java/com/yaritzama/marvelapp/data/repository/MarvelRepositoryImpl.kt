@@ -14,7 +14,7 @@ class MarvelRepositoryImpl @Inject constructor(
 
     override suspend fun getCharacterList(): List<CharacterModel> {
         val response = api.getCharacterList(BuildConfig.API_KEY,
-            "1234", hash = BuildConfig.HASH, offset = 50, limit = 150)
+            "1234", hash = BuildConfig.HASH, offset = 50, limit = 100)
         Log.e("Marvel API", response.toString())
         return response.body()?.data?.results?.map{
             it.toDomain()
