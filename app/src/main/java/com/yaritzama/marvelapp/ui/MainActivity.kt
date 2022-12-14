@@ -10,6 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.yaritzama.marvelapp.navigation.NavGraph
 import com.yaritzama.marvelapp.ui.theme.MarvelAppTheme
 import com.yaritzama.marvelapp.ui.views.CharactersView
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +28,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    CharactersView()
+                    //Establish the navigation
+                    val navController = rememberNavController()
+                    NavGraph(navController = navController)
                 }
             }
         }

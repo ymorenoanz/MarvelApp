@@ -15,14 +15,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.skydoves.landscapist.glide.GlideImage
+import com.yaritzama.marvelapp.navigation.Screens
 import com.yaritzama.marvelapp.ui.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 @Composable
-fun CharactersView() {
+fun CharactersView(navController: NavHostController) {
 
-    val vm: MainViewModel = viewModel()
+    val vm: MainViewModel = hiltViewModel()
     val character = vm.characterList
 
     Column(modifier = Modifier.padding(8.dp)) {
@@ -33,7 +37,8 @@ fun CharactersView() {
                     Card(elevation = 8.dp, modifier =
                     Modifier.padding(8.dp)){
                         Column(
-                            Modifier.padding(16.dp)
+                            Modifier
+                                .padding(16.dp)
                                 .align(Alignment.CenterHorizontally)) {
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
@@ -52,19 +57,22 @@ fun CharactersView() {
 
                             Row(){
                                 Row(modifier = Modifier.width(90.dp)) {
-                                    Button(onClick = { /*TODO*/ } ) {
+                                    Button(onClick = { navController
+                                        .navigate(Screens.SeriesView.route) } ) {
                                         Text("Series")
                                     }
                                 }
 
                                 Row(modifier = Modifier.width(100.dp)) {
-                                    Button(onClick = { /*TODO*/ }) {
+                                    Button(onClick = {navController
+                                        .navigate(Screens.ComicsView.route)}) {
                                         Text("Comics")
                                     }
                                 }
 
                                 Row(modifier = Modifier.width(100.dp)) {
-                                    Button(onClick = { /*TODO*/ }) {
+                                    Button(onClick = { navController
+                                        .navigate(Screens.DetailsView.route) }) {
                                         Text("Details")
                                     }
                                 }
