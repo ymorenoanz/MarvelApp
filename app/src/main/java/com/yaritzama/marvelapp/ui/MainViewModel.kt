@@ -31,7 +31,7 @@ class MainViewModel @Inject constructor(
     val comicList: SnapshotStateList<ComicModel>
         get() = _comicList
 
-    val characterId: Int = checkNotNull(savedStateHandle["characterId"])
+    //val characterId: Int = checkNotNull(savedStateHandle["characterId"])
     //private val characterInfo: Flow<CharacterModel> = repo.getComicList(characterId = characterId)
 
     init{
