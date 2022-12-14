@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     private val repo: MarvelRepository
 ): ViewModel() {
 
@@ -31,12 +31,15 @@ class MainViewModel @Inject constructor(
     val comicList: SnapshotStateList<ComicModel>
         get() = _comicList
 
-    //val characterId: Int = checkNotNull(savedStateHandle["characterId"])
-    //private val characterInfo: Flow<CharacterModel> = repo.getComicList(characterId = characterId)
+    //private val series: Flow<CharacterModel> = repo.getComicList(characterId = characterId)
 
     init{
         getCharacterList()
-        getComicList()
+    }
+
+
+    fun setCharacterId(id: Int){
+        savedStateHandle["characterId"] = id
     }
 
     private fun getCharacterList(){
@@ -46,10 +49,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun getComicList(){
+    fun getComicList(){
+        val characterId: Int = checkNotNull(savedStateHandle["characterId"])
         viewModelScope.launch(Dispatchers.IO){
-            val responseCharacter = repo.getCharacterList()
-            val response = repo.getComicList(1011334)
+            val response = repo.getComicList(characterId)
             _comicList.addAll(response)
         }
     }

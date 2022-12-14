@@ -12,25 +12,30 @@ import com.yaritzama.marvelapp.ui.views.DetailsView
 import com.yaritzama.marvelapp.ui.views.SeriesView
 
 @Composable
-fun NavGraph(navController: NavHostController){
-    NavHost(navController = navController,
-        startDestination = Screens.CharactersView.route){
+fun NavGraph(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = Screens.CharactersView.route
+    ) {
 
-        composable(route = Screens.CharactersView.route,
-            arguments = listOf(navArgument("characterId")
-            {type = NavType.IntType})){ backStackEntry ->
-            CharactersView(navController, backStackEntry.arguments?.getInt("characterId"))
+        composable(
+            route = Screens.CharactersView.route
+        ) {
+            CharactersView(navController)
         }
 
-        composable(route = Screens.SeriesView.route){
+        composable(route = Screens.SeriesView.route) {
             SeriesView(navController)
         }
 
-        composable(route = Screens.ComicsView.route){
-            ComicsView(navController)
+        composable(
+            route = "${Screens.ComicsView.route}{characterId}",
+            arguments = listOf(navArgument("characterId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            ComicsView(navController, backStackEntry.arguments?.getInt("characterId"))
         }
 
-        composable(route = Screens.DetailsView.route){
+        composable(route = Screens.DetailsView.route) {
             DetailsView(navController)
         }
 

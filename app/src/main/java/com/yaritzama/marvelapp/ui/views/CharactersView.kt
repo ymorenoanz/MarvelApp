@@ -14,15 +14,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.skydoves.landscapist.glide.GlideImage
 import com.yaritzama.marvelapp.navigation.Screens
 import com.yaritzama.marvelapp.ui.MainViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
 @Composable
-fun CharactersView(navController: NavHostController, int: Int?) {
+fun CharactersView(navController: NavHostController) {
 
     val vm: MainViewModel = hiltViewModel()
     val character = vm.characterList
@@ -63,7 +61,8 @@ fun CharactersView(navController: NavHostController, int: Int?) {
 
                                 Row(modifier = Modifier.width(100.dp)) {
                                     Button(onClick = {navController
-                                        .navigate(Screens.ComicsView.route)}) {
+                                        .navigate("${Screens.ComicsView.route}${item.id}")}) {
+                                        Text("Comics")
                                     }
                                 }
 
