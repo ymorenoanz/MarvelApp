@@ -3,19 +3,23 @@ package com.yaritzama.marvelapp.ui
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yaritzama.marvelapp.domain.model.CharacterModel
 import com.yaritzama.marvelapp.domain.model.ComicModel
 import com.yaritzama.marvelapp.domain.repository.MarvelRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val repo: MarvelRepository
 ): ViewModel() {
 
@@ -27,8 +31,8 @@ class MainViewModel @Inject constructor(
     val comicList: SnapshotStateList<ComicModel>
         get() = _comicList
 
-
-    val character = mutableStateOf<List<CharacterModel>>(listOf())
+    val characterId: Int = checkNotNull(savedStateHandle["characterId"])
+    //private val characterInfo: Flow<CharacterModel> = repo.getComicList(characterId = characterId)
 
     init{
         getCharacterList()
