@@ -1,9 +1,9 @@
-package com.yaritzama.marvelapp.data.models
+package com.yaritzama.marvelapp.data.models.comicsresponse
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Data(
+data class DataComic(
     @SerializedName("count")
     val count: Int?,
     @SerializedName("limit")
@@ -11,7 +11,7 @@ data class Data(
     @SerializedName("offset")
     val offset: Int?,
     @SerializedName("results")
-    val results: List<ResultResponse>?,
+    val results: List<ResultComic>?,
     @SerializedName("total")
     val total: Int?
 )

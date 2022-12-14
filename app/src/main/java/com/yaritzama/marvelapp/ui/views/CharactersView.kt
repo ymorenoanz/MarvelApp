@@ -47,7 +47,7 @@ fun CharactersView(navController: NavHostController) {
                                 textAlign = TextAlign.Left
                             )
                             Box(modifier = Modifier
-                                .height(100.dp)
+                                .height(200.dp)
                                 .width(200.dp)){
                                 val url = item.imageUrl.toString()
                                 val correctUrl = url.removePrefix("http")
@@ -82,7 +82,5 @@ fun CharactersView(navController: NavHostController) {
                     }
                 }
             })
-
-
     }
 }

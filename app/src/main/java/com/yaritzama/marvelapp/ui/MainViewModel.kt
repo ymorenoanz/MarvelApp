@@ -6,6 +6,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yaritzama.marvelapp.domain.model.CharacterModel
+import com.yaritzama.marvelapp.domain.model.ComicModel
 import com.yaritzama.marvelapp.domain.repository.MarvelRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,16 +23,30 @@ class MainViewModel @Inject constructor(
     val characterList: SnapshotStateList<CharacterModel>
             get() = _characterList
 
+    private val _comicList = mutableStateListOf<ComicModel>()
+    val comicList: SnapshotStateList<ComicModel>
+        get() = _comicList
+
+
     val character = mutableStateOf<List<CharacterModel>>(listOf())
 
     init{
         getCharacterList()
+        getComicList()
     }
 
     private fun getCharacterList(){
         viewModelScope.launch(Dispatchers.IO) {
             val response = repo.getCharacterList()
             _characterList.addAll(response)
+        }
+    }
+
+    private fun getComicList(){
+        viewModelScope.launch(Dispatchers.IO){
+            val responseCharacter = repo.getCharacterList()
+            val response = repo.getComicList(1011334)
+            _comicList.addAll(response)
         }
     }
 

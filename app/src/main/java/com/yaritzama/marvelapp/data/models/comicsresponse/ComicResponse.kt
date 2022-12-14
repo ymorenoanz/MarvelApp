@@ -1,9 +1,9 @@
-package com.yaritzama.marvelapp.data.models
+package com.yaritzama.marvelapp.data.models.comicsresponse
 
 
 import com.google.gson.annotations.SerializedName
 
-data class CharacterResponse(
+data class ComicResponse(
     @SerializedName("attributionHTML")
     val attributionHTML: String?,
     @SerializedName("attributionText")
@@ -13,7 +13,7 @@ data class CharacterResponse(
     @SerializedName("copyright")
     val copyright: String?,
     @SerializedName("data")
-    val data: Data?,
+    val data: DataComic?,
     @SerializedName("etag")
     val etag: String?,
     @SerializedName("status")

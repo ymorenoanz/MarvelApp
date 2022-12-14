@@ -1,9 +1,9 @@
-package com.yaritzama.marvelapp.data.models
+package com.yaritzama.marvelapp.data.models.comicsresponse
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Item(
+data class Series(
     @SerializedName("name")
     val name: String?,
     @SerializedName("resourceURI")

@@ -5,6 +5,7 @@ import com.yaritzama.marvelapp.BuildConfig
 import com.yaritzama.marvelapp.data.api.MarvelAPI
 import com.yaritzama.marvelapp.data.mappers.toDomain
 import com.yaritzama.marvelapp.domain.model.CharacterModel
+import com.yaritzama.marvelapp.domain.model.ComicModel
 import com.yaritzama.marvelapp.domain.repository.MarvelRepository
 import javax.inject.Inject
 
@@ -15,8 +16,18 @@ class MarvelRepositoryImpl @Inject constructor(
     override suspend fun getCharacterList(): List<CharacterModel> {
         val response = api.getCharacterList(BuildConfig.API_KEY,
             "1234", hash = BuildConfig.HASH, offset = 50, limit = 100)
-        Log.e("Marvel API", response.toString())
+        //Log.e("Marvel API", response.toString())
         return response.body()?.data?.results?.map{
+            it.toDomain()
+        } ?: emptyList()
+    }
+
+    //PENDING
+    override suspend fun getComicList(characterId: Int): List<ComicModel> {
+        val response = api.getComicsList(characterId = characterId, BuildConfig.API_KEY,
+            "1234", hash = BuildConfig.HASH)
+        Log.e("Marvel API", response.toString())
+        return response.body()?.data?.results?.map {
             it.toDomain()
         } ?: emptyList()
     }
