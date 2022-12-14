@@ -13,5 +13,7 @@ interface MarvelAPI {
     suspend fun getCharacterList(
         @Query("apikey" ) apikey: String,
         @Query("ts") ts: String,
-        @Query("hash") hash: String): Response<Data>
+        @Query("hash") hash: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int): Response<CharacterResponse>
 }

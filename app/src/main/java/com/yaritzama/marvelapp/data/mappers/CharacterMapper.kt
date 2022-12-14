@@ -6,5 +6,8 @@ import com.yaritzama.marvelapp.domain.model.CharacterModel
 fun ResultResponse.toDomain(): CharacterModel{
     return CharacterModel(
         id = this.id,
-        name = this.name)
+        name = this.name,
+        imageUrl = this.thumbnail?.path,
+        extensionImage = this.thumbnail?.extension
+    )
 }
