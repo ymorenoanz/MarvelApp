@@ -10,18 +10,10 @@ import retrofit2.http.Query
 interface MarvelAPI {
 
     @GET("characters")
-    suspend fun getCharacterList(
-        @Query("apikey" ) apikey: String,
-        @Query("ts") ts: String,
-        @Query("hash") hash: String,
-        @Query("offset") offset: Int,
-        @Query("limit") limit: Int): Response<CharacterResponse>
+    suspend fun getCharacterList(): Response<CharacterResponse>
 
     //PENDING
     @GET("characters/{characterId}/comics")
     suspend fun getComicsList(
-        @Path("characterId") characterId: Int,
-        @Query("apikey" ) apikey: String,
-        @Query("ts") ts: String,
-        @Query("hash") hash: String): Response<ComicResponse>
+        @Path("characterId") characterId: Int): Response<ComicResponse>
 }

@@ -1,34 +1,83 @@
 package com.yaritzama.marvelapp.data.repository
 
-import android.util.Log
-import com.yaritzama.marvelapp.BuildConfig
 import com.yaritzama.marvelapp.data.api.MarvelAPI
-import com.yaritzama.marvelapp.data.mappers.toDomain
+import com.yaritzama.marvelapp.data.database.dao.CharacterDAO
+import com.yaritzama.marvelapp.data.database.dao.ComicDAO
+import com.yaritzama.marvelapp.data.database.dao.SeriesDAO
+import com.yaritzama.marvelapp.data.mappers.*
+import com.yaritzama.marvelapp.data.models.character.CharacterResponse
+import com.yaritzama.marvelapp.domain.model.BaseResult
 import com.yaritzama.marvelapp.domain.model.CharacterModel
 import com.yaritzama.marvelapp.domain.model.ComicModel
+import com.yaritzama.marvelapp.domain.model.SeriesModel
 import com.yaritzama.marvelapp.domain.repository.MarvelRepository
+import com.yaritzama.marvelapp.utils.validateResponse
 import javax.inject.Inject
 
 class MarvelRepositoryImpl @Inject constructor(
-    private val api: MarvelAPI
-): MarvelRepository {
+    private val api: MarvelAPI,
+    private val characterDAO: CharacterDAO,
+    private val comicDAO: ComicDAO,
+    private val seriesDAO: SeriesDAO,
+) : MarvelRepository {
 
-    override suspend fun getCharacterList(): List<CharacterModel> {
-        val response = api.getCharacterList(BuildConfig.API_KEY,
-            "1234", hash = BuildConfig.HASH, offset = 50, limit = 100)
-        //Log.e("Marvel API", response.toString())
-        return response.body()?.data?.results?.map{
-            it.toDomain()
-        } ?: emptyList()
+    override suspend fun getCharacterList(needsUpdate: Boolean): BaseResult<List<CharacterModel>> {
+        val  forceUpdate = characterDAO.getCount() == 0
+        return if ( needsUpdate || forceUpdate) {
+
+            api.getCharacterList().validateResponse(
+                { characterResponse ->
+
+                    characterDAO.deleteAll()
+                    comicDAO.deleteAll()
+                    seriesDAO.deleteAll()
+
+                    val charactersModel = characterResponse?.data?.results?.toDomain()
+
+                    charactersModel?.toEntity()?.let { it ->
+                       characterDAO.insert(it)
+                    }
+
+                    characterResponse?.let {
+                        saveComicsFromCharacterResponse(it)
+                        saveSeriesFromCharacterResponse(it)
+                    }
+
+                    BaseResult.Success(characterDAO.getAll().toDomain())
+                }, { throwable ->
+                    BaseResult.Error(throwable.toString())
+                }
+            )
+
+        } else  BaseResult.Success(characterDAO.getAll().toDomain())
+
+
     }
 
-    //PENDING
-    override suspend fun getComicList(characterId: Int): List<ComicModel> {
-        val response = api.getComicsList(characterId = characterId, BuildConfig.API_KEY,
-            "1234", hash = BuildConfig.HASH)
-        Log.e("Marvel API", response.toString())
-        return response.body()?.data?.results?.map {
-            it.toDomain()
-        } ?: emptyList()
+    override suspend fun getComicList(characterId: Int): BaseResult<List<ComicModel>> =
+        BaseResult.Success(comicDAO.getAll(characterId).toDomain())
+
+    override suspend fun getSeriesList(characterId: Int): BaseResult<List<SeriesModel>> =
+        BaseResult.Success(seriesDAO.getAll(characterId).toDomain())
+
+    private suspend fun saveComicsFromCharacterResponse(characterResponse: CharacterResponse){
+        val comicsModelList = arrayListOf<ComicModel>()
+        characterResponse.data?.results?.forEach { characters ->
+            characters.comics?.items?.toDomainComic(characters.id?:0)
+                ?.let { comicsModelList.addAll(it) }
+        }
+        comicDAO.insert(comicsModelList.toEntityComic())
     }
+
+    private suspend fun saveSeriesFromCharacterResponse(characterResponse: CharacterResponse){
+        val comicsModelList = arrayListOf<SeriesModel>()
+        characterResponse.data?.results?.forEach { characters ->
+            characters.comics?.items?.toDomainSeries(characters.id?:0)
+                ?.let { comicsModelList.addAll(it) }
+        }
+        seriesDAO.insert(comicsModelList.toSeriesEntity())
+    }
+
 }
+
+

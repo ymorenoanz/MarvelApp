@@ -9,7 +9,7 @@ data class Comics(
     @SerializedName("collectionURI")
     val collectionURI: String?,
     @SerializedName("items")
-    val items: List<Item?>?,
+    val items: List<Item>?,
     @SerializedName("returned")
     val returned: Int?
 )

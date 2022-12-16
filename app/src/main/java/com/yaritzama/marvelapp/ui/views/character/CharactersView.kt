@@ -1,4 +1,4 @@
-package com.yaritzama.marvelapp.ui.views
+package com.yaritzama.marvelapp.ui.views.character
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -17,7 +17,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.skydoves.landscapist.glide.GlideImage
 import com.yaritzama.marvelapp.navigation.Screens
-import com.yaritzama.marvelapp.ui.MainViewModel
+import com.yaritzama.marvelapp.ui.viewmodel.MainViewModel
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun CharactersView(navController: NavHostController) {
@@ -46,15 +48,13 @@ fun CharactersView(navController: NavHostController) {
                                 .height(200.dp)
                                 .width(200.dp)){
                                 val url = item.imageUrl.toString()
-                                val correctUrl = url.removePrefix("http")
-                                GlideImage(imageModel = { "https" + correctUrl +
-                                         "."+  item.extensionImage.toString() })
+                                GlideImage(imageModel = { url })
                             }
 
                             Row(){
                                 Row(modifier = Modifier.width(90.dp)) {
                                     Button(onClick = { navController
-                                        .navigate(Screens.SeriesView.route) } ) {
+                                        .navigate("${Screens.SeriesView.route}${item.id}") } ) {
                                         Text("Series")
                                     }
                                 }
@@ -67,8 +67,9 @@ fun CharactersView(navController: NavHostController) {
                                 }
 
                                 Row(modifier = Modifier.width(100.dp)) {
+                                    val urlEncode = URLEncoder.encode(item.detailUrl, StandardCharsets.UTF_8.toString())
                                     Button(onClick = { navController
-                                        .navigate(Screens.DetailsView.route) }) {
+                                        .navigate("${Screens.DetailsView.route}${urlEncode}") }) {
                                         Text("Details")
                                     }
                                 }

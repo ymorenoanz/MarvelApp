@@ -2,15 +2,15 @@ package com.yaritzama.marvelapp.di
 
 import com.yaritzama.marvelapp.BuildConfig
 import com.yaritzama.marvelapp.data.api.MarvelAPI
+import com.yaritzama.marvelapp.utils.addAuthInterceptor
+import com.yaritzama.marvelapp.utils.addLoggerInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -20,17 +20,15 @@ object NetworkModule {
     @Singleton
     @Provides
     fun providesOkHttpClient() = OkHttpClient.Builder()
-        .writeTimeout(10L, TimeUnit.SECONDS )
-        .readTimeout(10L, TimeUnit.SECONDS ).addInterceptor(
-            HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-        ).build()
+        .addAuthInterceptor()
+        .addLoggerInterceptor()
+        .build()
 
     @Singleton
     @Provides
-    fun providesRetrofit(): Retrofit = Retrofit.Builder()
+    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
+        .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

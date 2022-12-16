@@ -6,10 +6,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.yaritzama.marvelapp.ui.views.CharactersView
-import com.yaritzama.marvelapp.ui.views.ComicsView
-import com.yaritzama.marvelapp.ui.views.DetailsView
+import com.yaritzama.marvelapp.ui.views.character.CharactersView
 import com.yaritzama.marvelapp.ui.views.SeriesView
+import com.yaritzama.marvelapp.ui.views.comics.ComicsView
+import com.yaritzama.marvelapp.ui.views.detail.DetailsView
 
 @Composable
 fun NavGraph(navController: NavHostController) {
@@ -24,8 +24,11 @@ fun NavGraph(navController: NavHostController) {
             CharactersView(navController)
         }
 
-        composable(route = Screens.SeriesView.route) {
-            SeriesView(navController)
+        composable(
+            route = "${Screens.SeriesView.route}{characterId}",
+            arguments = listOf(navArgument("characterId") { type = NavType.IntType })
+        ) {  backStackEntry ->
+            SeriesView(navController,backStackEntry.arguments?.getInt("characterId"))
         }
 
         composable(
@@ -35,8 +38,10 @@ fun NavGraph(navController: NavHostController) {
             ComicsView(navController, backStackEntry.arguments?.getInt("characterId"))
         }
 
-        composable(route = Screens.DetailsView.route) {
-            DetailsView(navController)
+        composable(route = "${Screens.DetailsView.route}{url}", arguments = listOf(navArgument("url"){
+            type = NavType.StringType
+        })) { backStackEntry ->
+            DetailsView(backStackEntry.arguments?.getString("url") ?: "")
         }
 
     }
