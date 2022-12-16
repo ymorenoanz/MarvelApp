@@ -19,6 +19,7 @@ android {
         buildConfigField  "String", "API_KEY", "\"863fa92794863e9533beb2a1c3912607\""
         buildConfigField  "String", "PRIVATE_KEY", "\"16f8758d0328462148c74f07ab19531e0c2224e4\""
         buildConfigField  "String", "BASE_URL", "\"https://gateway.marvel.com/v1/public/\""
+        buildConfigField  "String", "DATABASE_NAME", "\" Marvel.db\""
         //https://fe1d5c02-6122-4580-b002-6e36d8c23dab.mock.pstmn.io/
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -107,6 +108,9 @@ dependencies {
     // To use Kotlin annotation processing tool (kapt)
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    //ACCOMPANIST
+    implementation 'com.google.accompanist:accompanist-swiperefresh:0.26.5-rc'
 
 
 }

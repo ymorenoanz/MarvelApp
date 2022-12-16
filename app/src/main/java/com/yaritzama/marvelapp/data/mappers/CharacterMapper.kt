@@ -3,25 +3,43 @@ package com.yaritzama.marvelapp.data.mappers
 import com.yaritzama.marvelapp.data.models.character.ResultResponse
 import com.yaritzama.marvelapp.data.models.entity.CharacterEntity
 import com.yaritzama.marvelapp.domain.model.CharacterModel
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 
 fun List<ResultResponse>.toDomain(): List<CharacterModel> =
-    map {  CharacterModel(
-        id = it.id,
-        name = it.name,
-        imageUrl = "${it.thumbnail?.path?.replace("https","https")}.${it.thumbnail?.extension}",
-        detailUrl = it.urls?.find { url ->  url.type == "detail"}?.url ?: ""
-    )}
+    map {
+        CharacterModel(
+            id = it.id,
+            name = it.name,
+            description = it.description?:"",
+            imageUrl = "${
+                it.thumbnail?.path?.replace(
+                    "https",
+                    "https"
+                )
+            }.${it.thumbnail?.extension}",
+            detailUrl = URLEncoder.encode(
+                it.urls?.find { url -> url.type == "detail" }?.url ?: "",
+                StandardCharsets.UTF_8.toString()
+            )
+        )
+    }
 
 fun List<CharacterModel>.toEntity(): List<CharacterEntity> =
-    map {  CharacterEntity(id = it.id?:0, it.name, it.description , it.imageUrl, it.detailUrl)}
+    map { CharacterEntity(id = it.id ?: 0, it.name, it.description, it.imageUrl, it.detailUrl) }
 
 @JvmName("toDomainCharacterEntity")
 fun List<CharacterEntity>.toDomain(): List<CharacterModel> =
-    map{CharacterModel(id = it.id, it.name, it.description?:"" ,it.imageUrl, detailUrl = it.detailUrl)}
-
-
-
+    map {
+        CharacterModel(
+            id = it.id,
+            it.name,
+            it.description ?: "",
+            it.imageUrl,
+            detailUrl = it.detailUrl
+        )
+    }
 
 
 /*fun ResultComic.toDomain(characterId: Int): ComicModel{
