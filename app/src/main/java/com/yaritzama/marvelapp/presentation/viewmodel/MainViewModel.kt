@@ -4,24 +4,24 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yaritzama.marvelapp.core.di.qualifier.IODispatcher
-import com.yaritzama.marvelapp.core.di.qualifier.MainDispatcher
+import com.yaritzama.marvelapp.core.utils.IO_DISPATCHER
+import com.yaritzama.marvelapp.core.utils.MAIN_DISPATCHER
+import com.yaritzama.marvelapp.core.utils.validateResult
 import com.yaritzama.marvelapp.domain.model.CharacterModel
 import com.yaritzama.marvelapp.domain.repository.MarvelRepository
 import com.yaritzama.marvelapp.presentation.ui.state.StateUI
-import com.yaritzama.marvelapp.core.utils.validateResult
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.java.KoinJavaComponent.inject
 
-@HiltViewModel
-class MainViewModel @Inject constructor(
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+
+class MainViewModel(
+    private val ioDispatcher: CoroutineDispatcher,
+    private val mainDispatcher: CoroutineDispatcher,
     private val repo: MarvelRepository
 ) : ViewModel() {
+
 
     private val _stateUI = mutableStateOf(StateUI<List<CharacterModel>>())
     val stateUI: State<StateUI<List<CharacterModel>>> get() = _stateUI

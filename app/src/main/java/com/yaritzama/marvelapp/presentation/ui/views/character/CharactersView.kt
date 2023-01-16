@@ -21,11 +21,15 @@ import com.yaritzama.marvelapp.presentation.ui.views.common.BottomView
 import com.yaritzama.marvelapp.presentation.viewmodel.MainViewModel
 import com.yaritzama.marvelapp.ui.views.AlertView
 import com.yaritzama.marvelapp.presentation.ui.views.common.LoadingView
+import org.koin.androidx.compose.getKoin
+import org.koin.androidx.compose.inject
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CharactersView(navController: NavHostController) {
 
-    val viewModel: MainViewModel = hiltViewModel()
+    val viewModel = koinViewModel<MainViewModel>()
+
     val uiState = viewModel.stateUI.value
     val showAlert = uiState.error != null
 

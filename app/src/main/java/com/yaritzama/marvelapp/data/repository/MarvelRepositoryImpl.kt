@@ -11,7 +11,7 @@ import com.yaritzama.marvelapp.domain.repository.MarvelRepository
 import com.yaritzama.marvelapp.core.utils.validateResponse
 import javax.inject.Inject
 
-class MarvelRepositoryImpl @Inject constructor(
+class MarvelRepositoryImpl(
     private val api: MarvelAPI,
     private val characterDAO: CharacterDAO,
     private val comicDAO: ComicDAO,

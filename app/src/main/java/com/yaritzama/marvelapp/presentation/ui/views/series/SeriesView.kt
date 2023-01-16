@@ -17,10 +17,12 @@ import com.yaritzama.marvelapp.presentation.ui.theme.BackGroundColor
 import com.yaritzama.marvelapp.presentation.viewmodel.SeriesViewModel
 import com.yaritzama.marvelapp.ui.views.AlertView
 import com.yaritzama.marvelapp.presentation.ui.views.common.LoadingView
+import com.yaritzama.marvelapp.presentation.viewmodel.MainViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SeriesView( characterId: Int?){
-    val viewModel: SeriesViewModel = hiltViewModel()
+    val viewModel = koinViewModel<SeriesViewModel>()
 
     val uiState = viewModel.stateUI.value
     val showAlert = uiState.error != null

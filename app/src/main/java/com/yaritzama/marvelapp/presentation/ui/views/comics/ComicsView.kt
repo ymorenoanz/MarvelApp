@@ -18,11 +18,12 @@ import com.yaritzama.marvelapp.presentation.ui.views.common.BottomView
 import com.yaritzama.marvelapp.presentation.viewmodel.ComicsViewModel
 import com.yaritzama.marvelapp.ui.views.AlertView
 import com.yaritzama.marvelapp.presentation.ui.views.common.LoadingView
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ComicsView( characterId: Int?) {
 
-    val viewModel: ComicsViewModel = hiltViewModel()
+    val viewModel = koinViewModel<ComicsViewModel>()
     val uiState = viewModel.stateUI.value
     val showAlert = uiState.error != null
 

@@ -7,18 +7,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yaritzama.marvelapp.core.di.qualifier.IODispatcher
 import com.yaritzama.marvelapp.core.di.qualifier.MainDispatcher
+import com.yaritzama.marvelapp.core.utils.IO_DISPATCHER
+import com.yaritzama.marvelapp.core.utils.MAIN_DISPATCHER
 import com.yaritzama.marvelapp.domain.model.SeriesModel
 import com.yaritzama.marvelapp.domain.repository.MarvelRepository
 import com.yaritzama.marvelapp.presentation.ui.state.StateUI
 import com.yaritzama.marvelapp.core.utils.validateResult
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import org.koin.java.KoinJavaComponent
 import javax.inject.Inject
 
-@HiltViewModel
-class SeriesViewModel @Inject constructor(
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+
+class SeriesViewModel(
+    private val ioDispatcher: CoroutineDispatcher,
+    private val mainDispatcher: CoroutineDispatcher,
     private val savedStateHandle: SavedStateHandle,
     private val repository: MarvelRepository
 ) : ViewModel() {
